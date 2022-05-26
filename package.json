@@ -12,7 +12,6 @@
   },
   "license": "ISC",
   "keywords": [],
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pentodel/FlagGuessDiscordBot.git"
