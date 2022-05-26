@@ -16,15 +16,17 @@ const client = new Client({
 // Loading global variables
 var allData = JSON.parse(JSON.stringify(flagbot));
 
-items = Object.keys(allData);
+var items = Object.keys(allData);
 //.forEach((item, i) => console.log(allData[item].name));
 
 var aliasList = new Map();
 
-items.forEach((item) => {
-	if (Array.isArray(allData[item].alias)) {
-		allData[item].alias.forEach((al) => {
-			aliasList.set(al,item);
+items.forEach((id) => {
+	aliasList.set(allData[id].name.toLowerCase(), id);
+	
+	if (Array.isArray(allData[id].alias)) {
+		allData[id].alias.forEach((al) => {
+			aliasList.set(al.toLowerCase(),id);
 		});
 	}
 });
@@ -76,18 +78,15 @@ function help(ch) {
 }
 
 function getid(alias) {
-	console.log("-" + alias + "-");
-	console.log(aliasList);
-	console.log(aliasList[alias]);
-	return aliasList[alias];
+	return aliasList.get(alias);
 }
 
 function countrydata(id, ch) {
-	let country = allData[id];
+	let country = allData[id];	
 	let aliases = "None.";
-	if (country.aliases != "") {
+	if (country.alias != "") {
 		aliases = "";
-		country.aliases.forEach((e, i) => {
+		country.alias.forEach((e) => {
 			aliases += e + ", ";
 		});
 	}
@@ -95,10 +94,10 @@ function countrydata(id, ch) {
 		.setTitle(country.name)
 		.setColor('#000000')
 		.setImage(country.url)
-		.addField('Sovereign', country.sovereign, true)
+		.addField('Sovereign', country.sovereign.toString(), true)
 		.addField('Continent', country.continent, true)
 		.addField('Subregion', country.subregion, true)
-		.addfield('Aliases', aliases, true)
+		.addField('Aliases', aliases, true)
 		.setTimestamp();
 	ch.send({ embeds: [emb] });
 }

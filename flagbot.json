@@ -81,7 +81,7 @@
     "sovereign": true,
     "continent": "North America",
     "subregion": "Caribbean",
-    "alias": "antigua & barbuda"
+    "alias": ["antigua & barbuda"]
   },
   "11": {
     "name": "Argentina",
@@ -145,7 +145,7 @@
     "sovereign": true,
     "continent": "North America",
     "subregion": "Caribbean",
-    "alias": "the bahamas"
+    "alias": ["the bahamas"]
   },
   "19": {
     "name": "Bahrain",
@@ -241,7 +241,7 @@
     "sovereign": true,
     "continent": "Europe",
     "subregion": "South Europe",
-    "alias": "bosnia & herzegovina"
+    "alias": ["bosnia & herzegovina"]
   },
   "31": {
     "name": "Botswana",
@@ -317,7 +317,7 @@
     "sovereign": true,
     "continent": "Africa",
     "subregion": "West Africa",
-    "alias": "cape verde"
+    "alias": ["cape verde"]
   },
   "40": {
     "name": "Cambodia",
@@ -365,7 +365,7 @@
     "sovereign": true,
     "continent": "Africa",
     "subregion": "Central Africa",
-    "alias": "car"
+    "alias": ["car"]
   },
   "46": {
     "name": "Chad",
@@ -478,7 +478,7 @@
     "sovereign": false,
     "continent": "North America",
     "subregion": "Caribbean",
-    "alias": "curacao"
+    "alias": ["curacao"]
   },
   "59": {
     "name": "Cyprus",
@@ -494,7 +494,7 @@
     "sovereign": true,
     "continent": "Europe",
     "subregion": "East Europe",
-    "alias": "czechia"
+    "alias": ["czechia"]
   },
   "61": {
     "name": "Democratic Republic of the Congo",
@@ -602,7 +602,7 @@
     "sovereign": true,
     "continent": "Africa",
     "subregion": "South Africa",
-    "alias": "swaziland"
+    "alias": ["swaziland"]
   },
   "74": {
     "name": "Ethiopia",
@@ -618,7 +618,7 @@
     "sovereign": false,
     "continent": "Misc",
     "subregion": "Misc",
-    "alias": "eu"
+    "alias": ["eu"]
   },
   "76": {
     "name": "Falkland Islands",
@@ -706,7 +706,7 @@
     "sovereign": true,
     "continent": "Africa",
     "subregion": "West Africa",
-    "alias": "the gambia"
+    "alias": ["the gambia"]
   },
   "86": {
     "name": "Georgia",
@@ -1082,7 +1082,7 @@
     "sovereign": false,
     "continent": "Asia",
     "subregion": "East Asia",
-    "alias": "macao"
+    "alias": ["macao"]
   },
   "133": {
     "name": "Macedonia",
@@ -1515,7 +1515,7 @@
     "sovereign": false,
     "continent": "Africa",
     "subregion": "East Africa",
-    "alias": "reunion"
+    "alias": ["reunion"]
   },
   "186": {
     "name": "Romania",
@@ -1576,7 +1576,7 @@
     "sovereign": true,
     "continent": "North America",
     "subregion": "Caribbean",
-    "alias": "saint kitts and nevis"
+    "alias": ["saint kitts and nevis"]
   },
   "193": {
     "name": "Saint Lucia",
@@ -1948,7 +1948,7 @@
     "sovereign": false,
     "continent": "North America",
     "subregion": "Caribbean",
-    "alias": "turks & caicos islands"
+    "alias": ["turks & caicos islands"]
   },
   "237": {
     "name": "Tuvalu",
@@ -1964,7 +1964,7 @@
     "sovereign": false,
     "continent": "North America",
     "subregion": "Caribbean",
-    "alias": "us virgin islands"
+    "alias": ["us virgin islands"]
   },
   "239": {
     "name": "Uganda",
@@ -2053,7 +2053,7 @@
     "sovereign": true,
     "continent": "Europe",
     "subregion": "South Europe",
-    "alias": "holy see"
+    "alias": ["holy see"]
   },
   "249": {
     "name": "Venezuela",
@@ -2085,7 +2085,7 @@
     "sovereign": false,
     "continent": "Oceania",
     "subregion": "Polynesia",
-    "alias": "wallis and futuna"
+    "alias": ["wallis and futuna"]
   },
   "253": {
     "name": "Western Sahara",
@@ -2093,7 +2093,7 @@
     "sovereign": false,
     "continent": "Africa",
     "subregion": "North Africa",
-    "alias": "sahrawi arab democratic republic"
+    "alias": ["sahrawi arab democratic republic"]
   },
   "254": {
     "name": "Yemen",
