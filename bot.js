@@ -21,6 +21,24 @@ items = Object.keys(allData);
 
 var aliasList = new Map();
 
+items.forEach((item, i) =>
+	if (allData[item].alias1 != "") {
+		aliasList.set(allData[item].alias1, item);
+	}
+	if (allData[item].alias2 != "") {
+		aliasList.set(allData[item].alias2, item);
+	}
+	if (allData[item].alias3 != "") {
+		aliasList.set(allData[item].alias3, item);
+	}
+	if (allData[item].alias4 != "") {
+		aliasList.set(allData[item].alias4, item);
+	}
+	if (allData[item].alias5 != "") {
+		aliasList.set(allData[item].alias5, item);
+	}
+);
+
 
 
 
