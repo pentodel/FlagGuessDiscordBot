@@ -1788,8 +1788,10 @@
     "subregion": "Caribbean",
     "alias": [
       "st vincent and the grenadines",
-      "st. vincent & the grenadines",
-      "st vincent & the grenadines"
+      "st. vincent and the grenadines",
+      "st vincent & the grenadines",
+      "saint vincent and the grenadines",
+      "saint vincent & the grenadines"
     ]
   },
   "218": {
@@ -1998,7 +2000,10 @@
     "subregion": "West Europe",
     "alias": [
       "uk",
-      "u.k."
+      "u.k.",
+	  "great britain",
+	  "gb",
+	  "g.b."
     ]
   },
   "243": {

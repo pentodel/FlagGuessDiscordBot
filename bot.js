@@ -48,8 +48,8 @@ var currentState = State.On;
 var stateSaver = currentState;
 
 var waitCountdown = 0;
-const waitNo = 5;
-const chance = 2;
+const waitNo = 20;
+const chance = 10;
 var currentFlag = null;
 var streak = 0;
 
@@ -353,11 +353,12 @@ function guess(id, ch) {
 
 function getNamePattern(name) {
 	let newString = "`";
-	name.split('').forEach(function(c) {
+	
+	for (let i = 0; i < name.length; i++) {
+		let c = name.charAt(i);
 		if (c == ' ') newString + ' ';
 		else newString += "_";
-	});
-	
+	}
 	
 	newString += "`";
 	return newString;
