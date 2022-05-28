@@ -1558,6 +1558,7 @@
     "alias": [
       "st. barthélemy",
       "st barthélemy",
+      "saint barthélemy",
       "st. barthelemy",
       "saint barthelemy"
     ]
@@ -1568,7 +1569,10 @@
     "sovereign": false,
     "continent": "Misc",
     "subregion": "Misc",
-    "alias": ""
+    "alias": [
+		"st. helena",
+		"st helena"
+	]
   },
   "192": {
     "name": "Saint Kitts & Nevis",
@@ -1576,7 +1580,13 @@
     "sovereign": true,
     "continent": "North America",
     "subregion": "Caribbean",
-    "alias": ["saint kitts and nevis"]
+    "alias": [
+		"saint kitts and nevis",
+		"st. kitts & nevis",
+		"st. kitts and nevis",
+		"st kitts & nevis",
+		"st kitts and nevis"
+	]
   },
   "193": {
     "name": "Saint Lucia",
@@ -1595,7 +1605,13 @@
     "sovereign": false,
     "continent": "North America",
     "subregion": "Contiguous North America",
-    "alias": ""
+    "alias": [
+		"saint pierre and miquelon",
+		"st. pierre & miquelon",
+		"st. pierre and miquelon",
+		"st pierre & miquelon",
+		"st pierre and miquelon"
+	]
   },
   "195": {
     "name": "Samoa",
