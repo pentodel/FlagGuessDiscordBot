@@ -52,6 +52,7 @@ const waitNo = 20;
 const chance = 10;
 var currentFlag = null;
 var streak = 0;
+var hintLevel = 0;
 
 
 var currentRegion = "all";
@@ -86,7 +87,6 @@ client.on('message', function (m) {
 	
 	switch(command) {
 		case "^help":
-		case "^h":
 			help(ch);
 			break;
 		
@@ -211,16 +211,14 @@ client.on('message', function (m) {
 				ch.send("There is no flag to guess!");
 				break;
 			}
-			let hintNum = Math.floor(Math.random() * 3);
 			
-			if (hintNum == 0) {
-				ch.send(`This flag is from the region of ${allData[currentFlag].continent}.`);
-			} else if (hintNum == 1) {
-				let namePattern = getNamePattern(allData[currentFlag].name);
-				ch.send(`The name pattern of this flag is ${namePattern}.`);
-			} else if (hintNum == 2) {
-				ch.send(`The first letter of this country is ${allData[currentFlag].name.charAt(0)}`);
+			if (hintLevel == 0) {
+				ch.send(`This flag is from the region of ${allData[currentFlag].continent} and the subregion of ${allData[currentFlag].subregion}.`);
+			} else {
+				let namePattern = getNamePattern(allData[currentFlag].name, hintLevel - 1);
+				ch.send(`The name pattern of this country is ${namePattern}.`);
 			}
+			hintLevel++;
 			break;
 			
 	}
@@ -237,7 +235,7 @@ function help(ch) {
 		.setTitle('Help Guide!')
 		.setColor('#67b4c2')
 		.addField('Commands', '--------------------------------------')
-		.addField('^help, ^h', "Sends help embed.", true)
+		.addField('^help', "Sends help embed.", true)
 		.addField('^data, ^d [country]', "Sends country info.", true)
 		.addField('^guess, ^g [country]', "Guess a country name.", true)
 		.addField('^streak', "Show current streak data.", true)
@@ -334,6 +332,7 @@ function serve(ch) {
 	countryguessemb(currentFlag, ch);
 	currentState = State.Served;
 	waitCountdown = waitNo;
+	hintLevel = 0;
 }
 
 function guess(id, ch) {
@@ -351,13 +350,32 @@ function guess(id, ch) {
 	}
 }
 
-function getNamePattern(name) {
+function getNamePattern(name, characters) {
+	let charShowList = [];
+	if (characters < name.length) {
+		for (let i = 0; i < name.length; i++) {
+			charShowList.push(i);
+		}
+		
+		if (characters > 0) {
+			charShowList.shift();
+			characters--;
+			for (let i = 0; i < characters; i++) {
+				charShowList.splice(Math.floor(Math.random() * charShowList.length), 1);
+			}
+		}
+	}
+	
 	let newString = "`";
 	
 	for (let i = 0; i < name.length; i++) {
 		let c = name.charAt(i);
-		if (c == ' ') newString + ' ';
-		else newString += "_";
+		if (c == ' ') newString += ' ';
+		else if (!charShowList.includes(i)) {
+			newString += c;
+		} else {
+			newString += "_";
+		}
 	}
 	
 	newString += "`";
