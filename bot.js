@@ -1,7 +1,9 @@
 // Loading dependencies
 const { Client, Intents, Collection, MessageEmbed, MessageAttachment } = require('discord.js');
 const auth = require('./auth.json');
+var persistent = require('./persistent.json');
 const flagbot = require('./flagbot.json');
+const fs = require('fs');
 // Create a new bot object
 const client = new Client({
 	intents: [
@@ -15,6 +17,7 @@ const client = new Client({
 
 // SETUP
 var allData = JSON.parse(JSON.stringify(flagbot));
+var persistentData = JSON.parse(JSON.stringify(persistent));
 
 var items = Object.keys(allData);
 //.forEach((item, i) => console.log(allData[item].name));
@@ -48,10 +51,10 @@ var currentState = State.On;
 var stateSaver = currentState;
 
 var waitCountdown = 0;
-const waitNo = 20;
-const chance = 10;
+var waitNo = persistentData.waitNo;
+var chance = persistentData.chance;
 var currentFlag = null;
-var streak = 0;
+var streak = persistentData.streak;
 var hintLevel = 0;
 
 
@@ -65,7 +68,7 @@ client.once('ready', () => {
 	client.user.setActivity("Flagbot Active!");
 });
 
-client.on('message', function (m) {
+client.on('messageCreate', function (m) {
 	// bot does not reply to itself or any other bot
 	if (m.author.bot) return;
 	console.log(currentState.name);
@@ -220,15 +223,47 @@ client.on('message', function (m) {
 			}
 			hintLevel++;
 			break;
+		case "^setwaitcountdown":
+			let newwait = parseInt(content);
+			if (newwait == NaN) {
+				ch.send("Not a number.");
+				break;
+			}
+			waitNo = newwait;
+			persistentData.waitNo = newwait;
+			if (waitCountdown > newwait) waitCountdown = newwait;
+			writePersistent();
+			break;
+			
+		case "^setspawnchance":
+			let newchance = parseInt(content);
+			if (newchance == NaN) {
+				ch.send("Not a number.");
+				break;
+			}
+			chance = newchance;
+			persistentData.chance = newchance;
+			writePersistent();
+			break;
+			
 			
 	}
 	
 	if (currentState == State.On && Math.floor(Math.random() * chance) == 0) {
 		serve(ch);
 	}
-	
-	
 });
+
+function writePersistent() {
+	persistent = JSON.stringify(persistentData)
+	fs.writeFile('persistent.json', persistent, (err) => {
+		if (err) {
+			throw err;
+		}
+		console.log("Persistent data written.");
+	});
+	return;
+}
 
 function help(ch) {
 	let emb = new MessageEmbed()
@@ -252,6 +287,7 @@ function help(ch) {
 		.addField('^hint, ^h', 'Get a hint for the current flag!', true)
 		.setTimestamp();
 	ch.send({ embeds: [emb] });
+	return;
 }
 
 function getid(alias) {
@@ -344,6 +380,8 @@ function guess(id, ch) {
 			currentState = State.On;
 		}
 		streak++;
+		persistentData.streak = streak;
+		writePersistent();
 	} else {
 		ch.send("This guess is not correct! 😔");
 		streak = 0;
