@@ -1,5 +1,5 @@
 // Loading dependencies
-const { Client, Intents, Collection, MessageEmbed } = require('discord.js');
+const { Client, Intents, Collection, MessageEmbed, MessageAttachment } = require('discord.js');
 const auth = require('./auth.json');
 const flagbot = require('./flagbot.json');
 // Create a new bot object
@@ -13,7 +13,7 @@ const client = new Client({
 	partials: ['MESSAGE', 'REACTION'],
 });
 
-// Loading global variables
+// SETUP
 var allData = JSON.parse(JSON.stringify(flagbot));
 
 var items = Object.keys(allData);
@@ -31,37 +31,88 @@ items.forEach((id) => {
 	}
 });
 
+var currentBank = setRegion("all");
+
+class State {
+	static On = new State("on");
+	static Off = new State("off");
+	static Served = new State("served");
+	static Waiting = new State("waiting");
+	
+	constructor(name) {
+		this.name = name;
+	}
+}
+
+var currentState = State.On;
+
+var waitCountdown = 0;
+var currentFlag = null;
+var streak = 0;
 
 
 
-
-// when the client is ready, run this code
-// this event will only trigger one time after logging in
 client.once('ready', () => {
 	console.log('Ready!');
 	client.user.setActivity("Flagbot Active!");
 });
 
 client.on('message', function (m) {
-	// bot does not reply to itself
+	// bot does not reply to itself or any other bot
 	if (m.author.bot) return;
 	
 	let ml = m.content.toLowerCase();
-	
-	if (ml == "^help") help(m.channel);
-	
+	let ch = m.channel;
+		
 	let messagewords = ml.split(" ");
+	let command = messagewords[0];
+	messagewords.shift(); // remove the first item
+	let content = messagewords.join(" ").trim().toLowerCase();
 	
-	if (messagewords[0] == "^data") {
-		messagewords.shift(); // remove the first item
-		let alias = messagewords.join(" ");
-		let id = getid(alias);
-		if (id == undefined) {
-			m.channel.send("Country not found!");
-			return;
-		}
-		countrydata(id, m.channel);
-		return;
+	if (waitCountdown == 1) {
+		waitCountdown = 0;
+		currentState = State.On;
+	} else if (waitCountdown > 1) {
+		waitCountdown--;
+	}
+	
+	switch(command) {
+		case "^help":
+		case "^h":
+			help(ch);
+			break;
+		
+		case "^data":
+		case "^d":
+			if (currentState == State.Served) {
+				ch.send("Cannot use data command while waiting for a guess!");
+				break;
+			}
+			let id = getid(content);
+			if (id == undefined) {
+				m.channel.send("Country not found!");
+				break;
+			}
+			countrydata(id, ch);
+			break;
+			
+		case "^guess":
+		case "^g":
+			if (currentState != State.Served) {
+				ch.send("There's no flag to guess!");
+				break;
+			}
+			guess(getid(content),ch);
+			break;
+		case "^streak":
+			ch.send(`The current streak is ${streak}!`);
+			break;
+	}
+	
+	console.log(currentState.toString());
+	if (currentState == State.On && Math.floor(Math.random() * 10) == 0) {
+		console.log("random");
+		serve(ch);
 	}
 	
 	
@@ -72,7 +123,8 @@ function help(ch) {
 		.setTitle('Help Guide!')
 		.setColor('#67b4c2')
 		.addField('Commands', '--------------------------------------')
-		.addField('^help', "Displays help.", true)
+		.addField('^help, ^h', "Sends help embed.", true)
+		.addField('^data, ^d [country]', "Sends country info.", true)
 		.setTimestamp();
 	ch.send({ embeds: [emb] });
 }
@@ -83,23 +135,83 @@ function getid(alias) {
 
 function countrydata(id, ch) {
 	let country = allData[id];	
+	
 	let aliases = "None.";
 	if (country.alias != "") {
-		aliases = "";
-		country.alias.forEach((e) => {
-			aliases += e + ", ";
-		});
+		aliases = country.alias.toString();
 	}
+	
+	// let image = 'flag (' + id + ')'
+	// const attachment = new MessageAttachment(`./images/${image}`, `${image}`);
+	
 	let emb = new MessageEmbed()
 		.setTitle(country.name)
 		.setColor('#000000')
-		.setImage(country.url)
 		.addField('Sovereign', country.sovereign.toString(), true)
 		.addField('Continent', country.continent, true)
 		.addField('Subregion', country.subregion, true)
 		.addField('Aliases', aliases, true)
+		.setImage(country.url)
 		.setTimestamp();
-	ch.send({ embeds: [emb] });
+		
+	// .setImage(`attachment://${image}.png`)
+	// ch.send({ embeds: [emb], files: [{ attachment: `./images/${image}.png`, name: `${image}.png` }] });
+	
+	ch.send({embeds: [emb]});
+}
+
+function countryguessemb(id, ch) {
+	let country = allData[id];
+	let embedcolor = "#" + Math.floor(Math.random()*16777215).toString(16);
+	
+	let emb = new MessageEmbed()
+		.setTitle("Guess the country!")
+		.setDescription("Guess with `^guess [country]`!")
+		.setColor(embedcolor)
+		.setImage(country.url)
+		.setTimestamp();
+		
+	ch.send({embeds: [emb]});
+}
+
+function setRegion(reg) {
+	let arrayBank = []
+	if (reg == "all") {
+		Object.keys(allData).forEach((curr) => {
+			arrayBank.push(curr);
+		})
+		return arrayBank;
+	} else {
+		Object.keys(allData).forEach((curr) => {
+			if (allData[curr].continent.toLowerCase() == reg ||
+				allData[curr].subregion.toLowerCase() == reg) {
+				arrayBank.push(curr);
+			}
+		})
+		return arrayBank;
+	}
+}
+
+function serve(ch) {
+	currentFlag = currentBank[Math.floor(Math.random() * currentBank.length)];
+	countryguessemb(currentFlag, ch);
+	currentState = State.Served;
+	waitCountdown = 20;
+}
+
+function guess(id, ch) {
+	if (id == currentFlag) {
+		ch.send("This is correct! Congratulations! 🥳");
+		if (waitCountdown > 0) {
+			currentState = State.Waiting;
+		} else {
+			currentState = State.On;
+		}
+		streak++;
+	} else {
+		ch.send("This guess is not correct!");
+		streak = 0;
+	}
 }
 
 client.on("messageReactionAdd", async (reaction, user) => {
