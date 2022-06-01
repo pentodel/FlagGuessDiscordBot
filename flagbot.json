@@ -1296,7 +1296,10 @@
     "sovereign": true,
     "continent": "Europe",
     "subregion": "West Europe",
-    "alias": ""
+    "alias": [
+		"the netherlands",
+		"holland"
+	]
   },
   "159": {
     "name": "New Caledonia",
