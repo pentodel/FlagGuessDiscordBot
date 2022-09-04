@@ -626,7 +626,10 @@
     "sovereign": false,
     "continent": "South America",
     "subregion": "Lower South America",
-    "alias": ""
+    "alias": [
+		"las malvinas",
+		"malvinas"
+	]
   },
   "77": {
     "name": "Faroe Islands",
@@ -1197,7 +1200,11 @@
     "sovereign": true,
     "continent": "Oceania",
     "subregion": "Micronesia",
-    "alias": ""
+    "alias": [
+		"fsm",
+		"federated states of micronesia",
+		"the federated states of micronesia"
+	]
   },
   "147": {
     "name": "Moldova",
@@ -1315,7 +1322,10 @@
     "sovereign": true,
     "continent": "Oceania",
     "subregion": "Australasia",
-    "alias": ""
+    "alias": [
+		"aotearoa",
+		"nz"
+	]
   },
   "161": {
     "name": "Nicaragua",
@@ -1563,6 +1573,7 @@
       "st barthélemy",
       "saint barthélemy",
       "st. barthelemy",
+      "st barthelemy",
       "saint barthelemy"
     ]
   },
@@ -2009,7 +2020,9 @@
     "sovereign": true,
     "continent": "Asia",
     "subregion": "West Asia",
-    "alias": ""
+    "alias": [
+		"uae"
+	]
   },
   "242": {
     "name": "United Kingdom",
@@ -2077,7 +2090,7 @@
     "sovereign": true,
     "continent": "Europe",
     "subregion": "South Europe",
-    "alias": ["holy see"]
+    "alias": ["holy see", "the vatican", "vatican", "vc", "v.c."]
   },
   "249": {
     "name": "Venezuela",

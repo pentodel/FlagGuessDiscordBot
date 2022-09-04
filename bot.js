@@ -51,9 +51,10 @@ var currentState = State.On;
 var stateSaver = currentState;
 
 var waitCountdown = 0;
+var periodic = persistentData.periodic;
 var waitNo = persistentData.waitNo;
 var chance = persistentData.chance;
-var currentFlag = null;
+var currentFlag = persistentData.currentFlag;
 var streak = persistentData.streak;
 var hintLevel = 0;
 
@@ -71,7 +72,7 @@ client.once('ready', () => {
 client.on('messageCreate', function (m) {
 	// bot does not reply to itself or any other bot
 	if (m.author.bot) return;
-	console.log(currentState.name);
+	console.log(currentState.name + " - " + periodic);
 	
 	let ml = m.content.toLowerCase();
 	let ch = m.channel;
@@ -86,6 +87,9 @@ client.on('messageCreate', function (m) {
 		if (currentState == State.Waiting) currentState = State.On;
 	} else if (waitCountdown > 1) {
 		waitCountdown--;
+	}
+	if (currentState == State.Served && periodic > 0) {
+		periodic--;
 	}
 	
 	switch(command) {
@@ -143,9 +147,10 @@ client.on('messageCreate', function (m) {
 			
 		case "^force":
 			if (currentState == State.Served) {
-				streak = 0;
+				ch.send("There is a flag currently waiting for a guess! Use `^reshow` to send it again!");
+			} else {
+				serve(ch);
 			}
-			serve(ch);
 			break;
 			
 		case "^turnoff":
@@ -251,6 +256,9 @@ client.on('messageCreate', function (m) {
 	
 	if (currentState == State.On && Math.floor(Math.random() * chance) == 0) {
 		serve(ch);
+	} else if (currentState == State.Served && periodic == 0) {
+		countryguessemb(currentFlag, ch);
+		periodic = 20;
 	}
 });
 
@@ -368,7 +376,11 @@ function serve(ch) {
 	countryguessemb(currentFlag, ch);
 	currentState = State.Served;
 	waitCountdown = waitNo;
+	periodic = 20;
 	hintLevel = 0;
+	persistentData.currentFlag = currentFlag;
+	persistentData.periodic = periodic;
+	writePersistent();
 }
 
 function guess(id, ch) {
@@ -381,6 +393,8 @@ function guess(id, ch) {
 		}
 		streak++;
 		persistentData.streak = streak;
+		persistentData.currentFlag = null;
+		persistentData.periodic = 0;
 		writePersistent();
 	} else {
 		ch.send("This guess is not correct! 😔");
